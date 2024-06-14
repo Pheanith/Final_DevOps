@@ -1,0 +1,33 @@
+---
+- name: Perform tasks on the web server pod
+  hosts: webserver_pods
+  tasks:
+
+  - name: Pull the latest code from git
+    git:
+      repo: https://github.com/Pheanith/Final_DevOps.git
+      dest: ./laravel
+      version: main
+
+  - name: Install PHP dependencies with Composer
+    command: composer install
+    args:
+      chdir: ./laravel
+
+  - name: Install JavaScript dependencies with npm
+    command: npm install
+    args:
+      chdir: ./laravel
+
+  - name: Run tests against SQLite database
+    command: npm run test
+    args:
+      chdir: ./laravel
+  - name: Backup the MySQL database
+    mysql_db:
+      state: dump
+      target: ./laravel/dump.sql
+      login_host: mysql
+      login_user: root
+      login_password: Hello@123
+      name: nousopheanith-data.db
