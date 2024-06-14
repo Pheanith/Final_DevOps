@@ -34,6 +34,29 @@ jobs:
       uses: php-actions/composer@v6
       with:
         php_version: "8.2"
+    - name: Send Email Notification
+        env:
+          SMTP_HOST: smtp.gmail.com  # Replace with your SMTP server host
+          SMTP_PORT: 465  # Replace with your SMTP server port
+          SMTP_USER: nou.sopheanith@gmail.com  # Replace with your email
+          SMTP_PASS: Sopheanith21@  # Use GitHub secret for password
+        run: |
+          node -e "const nodemailer = require('nodemailer');
+          const transporter = nodemailer.createTransport({
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: true,
+            auth: {
+              user: process.env.SMTP_USER,
+              pass: process.env.SMTP_PASS
+            }
+          });
+          transporter.sendMail({
+            from: 'Pheanith <nou.sopheanith@gmail.com>',
+            to: 'tongsreng@itc.edu.kh',
+            subject: 'GitHub Actions Workflow Notification',
+            text: 'This email was sent automatically by GitHub Actions.'
+          }).then(console.log).catch(console.error);"
   
     # Docs: https://getcomposer.org/doc/articles/scripts.md
 
